@@ -2,6 +2,7 @@ import { Drawer } from 'antd';
 import { EditableProTable } from '@ant-design/pro-components';
 import { ICard } from '@/utils/types';
 import { useCards, useDeleteCard, useEditCardInfo } from '@/services/card';
+import { useTranslation } from 'react-i18next';
 import { getColumns } from './constants';
 
 interface IProps {
@@ -19,7 +20,7 @@ const ConsumeCard = ({
   const { data, loading, refetch } = useCards(id);
   const [del, delLoading] = useDeleteCard();
   const [edit, editLoading] = useEditCardInfo();
-
+  const { t } = useTranslation();
   const onDeleteHandler = (key: string) => {
     del(key, refetch);
   };
@@ -33,13 +34,13 @@ const ConsumeCard = ({
   };
   return (
     <Drawer
-      title="关联消费卡"
+      title={t('connectedWithCard')}
       width="90vw"
       open
       onClose={() => onClose()}
     >
       <EditableProTable<ICard>
-        headerTitle="请管理该课程的消费卡"
+        headerTitle={t('manage_this_course_card')}
         rowKey="id"
         loading={loading || editLoading || delLoading}
         recordCreatorProps={{

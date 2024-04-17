@@ -1,6 +1,7 @@
 import { useTeachers } from '@/services/teacher';
 import { IValue } from '@/utils/types';
 import { Select } from 'antd';
+import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 
 interface IProps {
@@ -21,7 +22,7 @@ const TeacherSelect = ({
       name,
     });
   }, 500);
-
+  const { t } = useTranslation();
   const onChangeHandler = (val: IValue[]) => {
     onChange?.(val);
   };
@@ -29,7 +30,7 @@ const TeacherSelect = ({
   return (
     <Select
       style={{ width: '100%' }}
-      placeholder="请选择老师"
+      placeholder={t('choose teacher')}
       showSearch
       onSearch={onSearchHandler}
       filterOption={false}

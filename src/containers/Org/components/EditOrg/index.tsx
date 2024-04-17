@@ -6,6 +6,7 @@ import UploadImage from '@/components/OSSImageUpload';
 import { useOrganization, useEditInfo } from '@/services/org';
 import { useMemo } from 'react';
 import { IOrganization } from '@/utils/types';
+import { useTranslation } from 'react-i18next';
 import style from './index.module.less';
 
 interface IProp {
@@ -20,7 +21,7 @@ const EditOrg = ({
   onClose,
 }: IProp) => {
   const [form] = Form.useForm();
-
+  const { t } = useTranslation();
   const { data, loading: queryLoading } = useOrganization(id);
   const [edit, editLoading] = useEditInfo();
 
@@ -57,7 +58,7 @@ const EditOrg = ({
 
   return (
     <Drawer
-      title="编辑门店信息"
+      title={t('editStore')}
       width="70vw"
       onClose={onClose}
       open
@@ -68,7 +69,7 @@ const EditOrg = ({
           type="primary"
           onClick={onFinishHandler}
         >
-          保存
+          {t('save')}
         </Button>
       )}
     >
@@ -83,72 +84,78 @@ const EditOrg = ({
             >
               <UploadImage
                 maxCount={1}
-                label="替换 Logo"
+                label={t('changeLogo')}
               />
             </Form.Item>
           </Col>
           <Col span={14}>
             <Form.Item
               style={{ width: '100%' }}
-              label="名称"
+              label={t('name')}
               name="name"
               rules={[{ required: true }]}
             >
-              <Input placeholder="请输入门店名称" />
+              <Input placeholder={t('inputStoreName')} />
             </Form.Item>
           </Col>
         </Row>
         <Row className={style.row} gutter={20}>
           <Col span={11}>
             <Form.Item
-              label="标签"
+              label={t('tags')}
               name="tags"
               rules={[{ required: true }]}
             >
               <Select
                 mode="tags"
                 style={{ width: '100%' }}
-                placeholder="请输入标签"
+                placeholder={t('inputTags')}
               />
             </Form.Item>
           </Col>
           <Col span={5}>
             <Form.Item
-              label="手机号"
+              label={t('tel')}
               name="tel"
               rules={[{ required: true }]}
             >
-              <Input placeholder="请输入手机号" />
+              <Input placeholder={t('InputPhoneNumber')} />
             </Form.Item>
           </Col>
           <Col span={4}>
             <Form.Item
-              label="经度"
+              label={t('longitude')}
               name="longitude"
-              rules={[{ required: true }]}
+              rules={[{ required: true }, {
+                pattern: /^(-?((1[0-7]\d)|([1-9]?\d))(\.\d+)?|180(\.0+)?)$/,
+                message: t('longitudeRule'),
+              }]}
             >
-              <Input placeholder="请输入经度" />
+              <Input placeholder={t('inputLongitude')} />
             </Form.Item>
           </Col>
           <Col span={4}>
             <Form.Item
-              label="纬度"
+              label={t('latitude')}
               name="latitude"
-              rules={[{ required: true }]}
+              rules={[{ required: true }, {
+                pattern: /^(-?(90(\.0+)?|[1-8]?\d(\.\d+)?))$/,
+                message: t('latitudeRule'),
+              }]}
             >
-              <Input placeholder="请输入纬度" />
+              <Input placeholder={t('inputLatitude')} />
             </Form.Item>
           </Col>
         </Row>
         <Form.Item
-          label="地址"
+          label={t('address')}
           name="address"
           rules={[{ required: true }]}
         >
-          <Input placeholder="请输入地址" />
+          <Input placeholder={t('inputAddress')} />
         </Form.Item>
         <Form.Item
-          label="门店简介"
+          label={t('storeDescription')}
           name="description"
           rules={[{ required: true }]}
         >
@@ -164,12 +171,12 @@ const EditOrg = ({
           <Col span={8}>
             <Form.Item
               style={{ width: '100%' }}
-              label="营业执照"
+              label={t('businessLicense')}
               name="businessLicense"
               rules={[{ required: true }]}
             >
               <UploadImage
-                label="替换营业执照"
+                label={t('changeBusinessLicense')}
                 maxCount={1}
                 imgCropAspect={3 / 2}
               />
@@ -178,12 +185,12 @@ const EditOrg = ({
           <Col span={8}>
             <Form.Item
               style={{ width: '100%' }}
-              label="身份证正面"
+              label={t('identityCardFrontImg')}
               name="identityCardFrontImg"
               rules={[{ required: true }]}
             >
               <UploadImage
-                label="替换身份证"
+                label={t('changeIdentityCardFrontImg')}
                 maxCount={1}
                 imgCropAspect={3 / 2}
               />
@@ -192,12 +199,12 @@ const EditOrg = ({
           <Col span={8}>
             <Form.Item
               style={{ width: '100%' }}
-              label="身份证背面"
+              label={t('identityCardBackImg')}
               name="identityCardBackImg"
               rules={[{ required: true }]}
             >
               <UploadImage
-                label="替换身份证"
+                label={t('changeIdentityCardBackImg')}
                 maxCount={1}
                 imgCropAspect={3 / 2}
               />
@@ -205,17 +212,17 @@ const EditOrg = ({
           </Col>
         </Row>
 
-        <Divider>门店顶部图：图片长宽要求比例为 2:1，最多上传 5 张 </Divider>
+        <Divider>{t('promptTop')}</Divider>
         <Form.Item name="orgFrontImg">
-          <UploadImage maxCount={5} imgCropAspect={2 / 1} />
+          <UploadImage label={t('upload images')} maxCount={5} imgCropAspect={2 / 1} />
         </Form.Item>
-        <Divider>门店室内图：图片长宽要求比例为 2:1，最多上传 5 张 </Divider>
+        <Divider>{t('promptIn')}</Divider>
         <Form.Item name="orgRoomImg">
-          <UploadImage maxCount={5} imgCropAspect={2 / 1} />
+          <UploadImage label={t('upload images')} maxCount={5} imgCropAspect={2 / 1} />
         </Form.Item>
-        <Divider>门店其他图：图片长宽要求比例为 2:1，最多上传 5 张 </Divider>
+        <Divider>{t('promptOther')}</Divider>
         <Form.Item name="orgOtherImg">
-          <UploadImage maxCount={5} imgCropAspect={2 / 1} />
+          <UploadImage label={t('upload images')} maxCount={5} imgCropAspect={2 / 1} />
         </Form.Item>
       </Form>
     </Drawer>

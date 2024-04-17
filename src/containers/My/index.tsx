@@ -5,6 +5,7 @@ import {
   PageContainer, ProForm, ProFormInstance, ProFormText, ProFormTextArea,
 } from '@ant-design/pro-components';
 import { useMutation } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 import {
   Col, Row, message, Form,
 } from 'antd';
@@ -18,7 +19,7 @@ const My = () => {
   const { store } = useUserContext();
 
   const [updateUserInfo] = useMutation(UPDATE_USER);
-
+  const { t } = useTranslation();
   useEffect(() => {
     if (!store.tel) return;
     formRef.current?.setFieldsValue({
@@ -55,34 +56,35 @@ const My = () => {
           });
           if (res.data.updateUserInfo.code === 200) {
             store.refetchHandler?.();
-            message.success(res.data.updateUserInfo.message);
+            // res.data.updateUserInfo.message
+            message.success(t('updateUserOk'));
             return;
           }
-          message.error(res.data.updateUserInfo.message);
+          message.error(t('updateUserFail'));
         }}
       >
         <Row gutter={20}>
           <Col>
             <ProFormText
               name="tel"
-              label="手机号"
-              tooltip="不能修改"
+              label={t('tel')}
+              tooltip={t('not allowed to modify')}
               disabled
             />
             <ProFormText
               name="name"
-              label="昵称"
-              placeholder="请输入昵称"
+              label={t('nickname')}
+              placeholder={t('inputNickname')}
             />
             <ProFormTextArea
               name="desc"
-              label="简介"
-              placeholder="请输入简介信息"
+              label={t('brief')}
+              placeholder={t('inputBrief')}
             />
           </Col>
           <Col>
             <Form.Item name="avatar">
-              <OSSImageUpload label="更改头像" />
+              <OSSImageUpload label={t('changeAvatar')} />
             </Form.Item>
           </Col>
         </Row>

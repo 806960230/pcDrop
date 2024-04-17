@@ -1,8 +1,9 @@
 import { PageContainer, ProList } from '@ant-design/pro-components';
 import { useState } from 'react';
 import { Button, Popconfirm, Tag } from 'antd';
-import { DEFAULT_PAGE_SIZE } from '@/utils/constants';
+import { DEFAULT_PAGE_SIZE, LOCAL_CURRENT_ORG } from '@/utils/constants';
 import { useDeleteOrg, useOrganizations } from '@/services/org';
+import { useTranslation } from 'react-i18next';
 import EditOrg from './components/EditOrg';
 
 import style from './index.module.less';
@@ -12,7 +13,7 @@ const Org = () => {
     loading, data, page, refetch,
   } = useOrganizations();
   const [delHandler, delLoading] = useDeleteOrg();
-
+  const { t } = useTranslation();
   const [showEdit, setShowEdit] = useState(false);
   const [curId, setCurId] = useState('');
 
@@ -23,6 +24,9 @@ const Org = () => {
 
   const delInfoHandler = async (id: string) => {
     delHandler(id, refetch);
+    if (JSON.parse(localStorage.getItem(LOCAL_CURRENT_ORG) || '').value === id) {
+      localStorage.removeItem(LOCAL_CURRENT_ORG);
+    }
   };
 
   const addInfoHandler = () => {
@@ -49,16 +53,16 @@ const Org = () => {
     key: item.id,
     subTitle: <div>{item.tags?.split(',').map((tag) => (<Tag key={tag} color="#5BD8A6">{tag}</Tag>))}</div>,
     actions: [
-      <Button type="link" onClick={() => editInfoHandler(item.id)}>编辑</Button>,
+      <Button type="link" onClick={() => editInfoHandler(item.id)}>{t('edit')}</Button>,
       <Popconfirm
-        title="提醒"
+        title={t('prompt')}
         okButtonProps={{
           loading: delLoading,
         }}
-        description={`确定要删除 ${item.name} 吗？`}
+        description={t('sureDelete')}
         onConfirm={() => delInfoHandler(item.id)}
       >
-        <Button type="link">删除</Button>
+        <Button type="link">{t('delete')}</Button>
       </Popconfirm>,
     ],
     content: item.address,
@@ -69,10 +73,10 @@ const Org = () => {
       <PageContainer
         loading={loading}
         header={{
-          title: '门店管理',
+          title: t('storeManagement'),
         }}
         extra={[
-          <Button key="1" type="primary" onClick={addInfoHandler}>新增门店</Button>,
+          <Button key="1" type="primary" onClick={addInfoHandler}>{t('createStore')}</Button>,
         ]}
       >
         <ProList<any>
@@ -104,10 +108,10 @@ const Org = () => {
           dataSource={dataSource}
         />
         {showEdit && (
-        <EditOrg
-          id={curId}
-          onClose={onCloseHandler}
-        />
+          <EditOrg
+            id={curId}
+            onClose={onCloseHandler}
+          />
         )}
       </PageContainer>
     </div>

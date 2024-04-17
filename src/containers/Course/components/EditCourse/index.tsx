@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import UploadImage from '@/components/OSSImageUpload';
 import TeacherSelect from '@/components/TeacherSelect';
 import { ITeacher, IValue } from '@/utils/types';
+import { useTranslation } from 'react-i18next';
 
 const { TextArea } = Input;
 
@@ -34,7 +35,7 @@ const EditCourse = ({
   const [form] = Form.useForm();
   const [edit, editLoading] = useEditCourseInfo();
   const { getCourse, loading } = useCourse();
-
+  const { t } = useTranslation();
   useEffect(() => {
     const init = async () => {
       if (id) {
@@ -67,15 +68,15 @@ const EditCourse = ({
 
   return (
     <Drawer
-      title={id ? '编辑课程' : '新建课程'}
+      title={id ? t('editCourse') : t('createCourse')}
       width={720}
       open
       onClose={() => onClose()}
       extra={(
         <Space>
-          <Button onClick={() => onClose()}>取消</Button>
+          <Button onClick={() => onClose()}>{t('cancel')}</Button>
           <Button loading={editLoading} onClick={onSubmitHandler} type="primary">
-            提交
+            {t('submit')}
           </Button>
         </Space>
       )}
@@ -85,16 +86,16 @@ const EditCourse = ({
           form={form}
         >
           <Form.Item
-            label="封面图"
+            label={t('coverImage')}
             name="coverUrl"
             rules={[{
               required: true,
             }]}
           >
-            <UploadImage imgCropAspect={2 / 1} />
+            <UploadImage label={t('upload images')} imgCropAspect={2 / 1} />
           </Form.Item>
           <Form.Item
-            label="课程名称"
+            label={t('courseName')}
             name="name"
             rules={[{
               required: true,
@@ -103,7 +104,7 @@ const EditCourse = ({
             <Input />
           </Form.Item>
           <Form.Item
-            label="任课老师"
+            label={t('lecturer')}
             name="teachers"
             rules={[{
               required: true,
@@ -112,7 +113,7 @@ const EditCourse = ({
             <TeacherSelect />
           </Form.Item>
           <Form.Item
-            label="课程描述"
+            label={t('courseDescription')}
             name="desc"
             rules={[{
               required: true,
@@ -123,29 +124,29 @@ const EditCourse = ({
           <Row gutter={20}>
             <Col>
               <Form.Item
-                label="限制人数"
+                label={t('limitNumber')}
                 name="limitNumber"
                 rules={[{
                   required: true,
                 }]}
               >
-                <InputNumber min={0} addonAfter="人" />
+                <InputNumber min={0} addonAfter={t('person')} />
               </Form.Item>
             </Col>
             <Col>
               <Form.Item
-                label="持续时长"
+                label={t('duration')}
                 name="duration"
                 rules={[{
                   required: true,
                 }]}
               >
-                <InputNumber min={0} addonAfter="分钟" />
+                <InputNumber min={0} addonAfter={t('minute')} />
               </Form.Item>
             </Col>
           </Row>
           <Form.Item
-            label="适龄人群"
+            label={t('ageGroup')}
             name="group"
             rules={[{
               required: true,
@@ -154,7 +155,7 @@ const EditCourse = ({
             <Input />
           </Form.Item>
           <Form.Item
-            label="基础能力"
+            label={t('basicAbility')}
             name="baseAbility"
             rules={[{
               required: true,
@@ -163,7 +164,7 @@ const EditCourse = ({
             <Input />
           </Form.Item>
           <Form.Item
-            label="预约信息"
+            label={t('reserveInfo')}
             name="reserveInfo"
             rules={[{
               required: true,
@@ -172,7 +173,7 @@ const EditCourse = ({
             <TextArea rows={5} showCount maxLength={200} />
           </Form.Item>
           <Form.Item
-            label="退款信息"
+            label={t('refundInfo')}
             name="refundInfo"
             rules={[{
               required: true,
@@ -180,7 +181,7 @@ const EditCourse = ({
           >
             <TextArea rows={5} showCount maxLength={200} />
           </Form.Item>
-          <Form.Item label="其他信息" name="otherInfo">
+          <Form.Item label={t('otherInfo')} name="otherInfo">
             <TextArea rows={5} showCount maxLength={200} />
           </Form.Item>
         </Form>

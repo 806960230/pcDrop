@@ -1,6 +1,7 @@
 import { Select } from 'antd';
 import { useCoursesForSample } from '@/services/course';
 import _ from 'lodash';
+import { useTranslation } from 'react-i18next';
 import style from './index.module.less';
 
 interface IProps {
@@ -14,7 +15,7 @@ const CourseSearch = ({
   onSelected,
 }: IProps) => {
   const { search, data, loading } = useCoursesForSample();
-
+  const { t } = useTranslation();
   const onSearchHandler = _.debounce((name: string) => {
     search(name);
   }, 500);
@@ -26,7 +27,7 @@ const CourseSearch = ({
     <Select
       className={style.select}
       showSearch
-      placeholder="请搜索课程"
+      placeholder={t('searchCourse')}
       onSearch={onSearchHandler}
       onChange={onChangeHandler}
       filterOption={false}

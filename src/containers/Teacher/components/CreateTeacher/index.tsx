@@ -5,12 +5,11 @@ import {
 } from 'antd';
 import { useEditTeacherInfo, useTeacher } from '@/services/teacher';
 import { useMemo } from 'react';
-import UploadMedia from '@/components/OSSImageUpload';
-
+import { useTranslation } from 'react-i18next';
+import UploadImage from '@/components/OSSImageUpload';
 import style from './index.module.less';
 
 const { TextArea } = Input;
-
 interface IProp {
   id: string;
   onClose: (refetch?: boolean) => void;
@@ -23,7 +22,7 @@ const CreateTeacher = ({ id, onClose }: IProp) => {
   const [form] = Form.useForm();
   const { data, loading } = useTeacher(id);
   const [handleEdit, editLoading] = useEditTeacherInfo();
-
+  const { t } = useTranslation();
   const initValue = useMemo(() => (data ? {
     ...data,
     tags: data.tags.split(','),
@@ -46,12 +45,12 @@ const CreateTeacher = ({ id, onClose }: IProp) => {
       onClose={() => onClose()}
       open
       width="70vw"
-      title="创建教师"
+      title={t('createTeacher')}
       extra={(
         <Space>
-          <Button onClick={() => onClose()}>取消</Button>
+          <Button onClick={() => onClose()}>{t('cancel')}</Button>
           <Button loading={editLoading} onClick={onSubmitHandler} type="primary">
-            提交
+            {t('submit')}
           </Button>
         </Space>
       )}
@@ -64,16 +63,16 @@ const CreateTeacher = ({ id, onClose }: IProp) => {
           layout="vertical"
         >
           <Form.Item
-            label="头像"
+            label={t('avatar')}
             name="photoUrl"
             rules={[{ required: true }]}
           >
-            <UploadMedia />
+            <UploadImage label={t('upload images')} maxCount={1} />
           </Form.Item>
           <Row className={style.row} gutter={20}>
             <Col span={16}>
               <Form.Item
-                label="名称"
+                label={t('name')}
                 name="name"
                 rules={[{ required: true }]}
               >
@@ -82,7 +81,7 @@ const CreateTeacher = ({ id, onClose }: IProp) => {
             </Col>
             <Col span={8}>
               <Form.Item
-                label="教龄"
+                label={t('teachingExperience')}
                 name="teacherTime"
                 rules={[{ required: true }]}
               >
@@ -93,7 +92,7 @@ const CreateTeacher = ({ id, onClose }: IProp) => {
           <Row className={style.row} gutter={20}>
             <Col span={11}>
               <Form.Item
-                label="标签"
+                label={t('tags')}
                 name="tags"
                 rules={[{ required: true }]}
               >
@@ -104,7 +103,7 @@ const CreateTeacher = ({ id, onClose }: IProp) => {
             </Col>
             <Col span={5}>
               <Form.Item
-                label="资历"
+                label={t('seniority')}
                 name="seniority"
                 rules={[{ required: true }]}
               >
@@ -113,7 +112,7 @@ const CreateTeacher = ({ id, onClose }: IProp) => {
             </Col>
             <Col span={8}>
               <Form.Item
-                label="学历"
+                label={t('education')}
                 name="education"
                 rules={[{ required: true }]}
               >
@@ -121,7 +120,7 @@ const CreateTeacher = ({ id, onClose }: IProp) => {
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item label="获奖经历" name="carryPrize">
+          <Form.Item label={t('prize')} name="carryPrize">
             <TextArea
               maxLength={200}
               className={style.textArea}
@@ -129,7 +128,7 @@ const CreateTeacher = ({ id, onClose }: IProp) => {
               showCount
             />
           </Form.Item>
-          <Form.Item label="职业经验" name="experience">
+          <Form.Item label={t('experience')} name="experience">
             <TextArea
               maxLength={200}
               className={style.textArea}

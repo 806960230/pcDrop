@@ -1,3 +1,4 @@
+import { createContext } from 'react';
 import Home from '@/containers/Home';
 import My from '@/containers/My';
 import Page404 from '@/containers/Page404';
@@ -8,6 +9,14 @@ import Course from '@/containers/Course';
 import Product from '@/containers/Product';
 import Teacher from '@/containers/Teacher';
 import { ROUTE_KEY } from './menus';
+
+export const DataContext = createContext<{
+  locale: string;
+  setLocale: React.Dispatch<React.SetStateAction<string>>;
+}>({
+  locale: 'en',
+  setLocale: () => {},
+});
 
 export const ROUTE_COMPONENT = {
   [ROUTE_KEY.HOME]: Home,

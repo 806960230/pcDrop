@@ -9,6 +9,7 @@ import CourseSearch from '@/components/CourseSearch';
 import { getCardName } from '@/utils/constants';
 import _ from 'lodash';
 import { CreditCardOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import style from './index.module.less';
 
 interface IProps {
@@ -46,10 +47,10 @@ const ConsumeCard = ({
   const onSelectedHandler = (courseId: string) => {
     getCards(courseId);
   };
-
+  const { t } = useTranslation();
   return (
     <Modal
-      title="绑定消费卡"
+      title={t('linkCard')}
       width="900"
       open
       onOk={onOkHandler}
@@ -62,7 +63,7 @@ const ConsumeCard = ({
         {newCards.length === 0 && (
         <Result
           status="warning"
-          title="请搜索课程并选择对应的消费卡"
+          title={t('chooseCard')}
         />
         )}
         <CheckCard.Group
@@ -102,11 +103,13 @@ const ConsumeCard = ({
                   (
                     <Space>
                       <span>
-                        次数：
+                        {t('times')}
+                        :
                         {item.time}
                       </span>
                       <span>
-                        有效期：
+                        {t('validityDay')}
+                        :
                         {item.validityDay}
                       </span>
                     </Space>

@@ -6,6 +6,7 @@ import {
 import type { UploadFile } from 'antd/es/upload/interface';
 import { useQuery } from '@apollo/client';
 import { GET_OSS_INFO } from '@/graphql/oss';
+import i18next from 'i18next';
 
 interface OSSDataType {
   dir: string;
@@ -32,7 +33,6 @@ const OSSImageUpload = ({
   onChange,
 }: OSSUploadProps) => {
   const { data, refetch } = useQuery<{ getOSSInfo: OSSDataType }>(GET_OSS_INFO);
-
   const OSSData = data?.getOSSInfo;
 
   const getKey = (file: UploadFile) => {
@@ -86,7 +86,7 @@ const OSSImageUpload = ({
   );
 };
 OSSImageUpload.defaultProps = {
-  label: '上传图片',
+  label: i18next.t('upload images'),
   value: null,
   onChange: () => {},
   maxCount: 1,

@@ -1,6 +1,7 @@
 import { IOrderTime, TWeek } from '@/utils/types';
 import { ProColumns } from '@ant-design/pro-components';
 import { Popconfirm, Space } from 'antd';
+import i18next from 'i18next';
 
 export interface IDay {
   key: TWeek;
@@ -17,51 +18,82 @@ export const DAYS: IDay[] = [
     label: '周二',
   },
   {
-    label: '周三',
     key: 'wednesday',
+    label: '周三',
   },
   {
-    label: '周四',
     key: 'thursday',
+    label: '周四',
   },
   {
-    label: '周五',
     key: 'friday',
+    label: '周五',
   },
   {
-    label: '周六',
     key: 'saturday',
+    label: '周六',
   },
   {
-    label: '周日',
     key: 'sunday',
+    label: '周日',
+  },
+];
+
+export const DAYSEN: IDay[] = [
+  {
+    key: 'monday',
+    label: 'monday',
+  },
+  {
+    key: 'tuesday',
+    label: 'tuesday',
+  },
+  {
+    key: 'wednesday',
+    label: 'wednesday',
+  },
+  {
+    key: 'thursday',
+    label: 'thursday',
+  },
+  {
+    key: 'friday',
+    label: 'friday',
+  },
+  {
+    key: 'saturday',
+    label: 'saturday',
+  },
+  {
+    key: 'sunday',
+    label: 'sunday',
   },
 ];
 
 export const getColumns = (onDeleteHandler: Function): ProColumns[] => [
   {
-    title: '序号',
+    title: i18next.t('serial number'),
     dataIndex: 'key',
-    width: 50,
+    width: 100,
     editable: false,
     align: 'center',
   },
   {
-    title: '开始时间',
+    title: i18next.t('startTime'),
     dataIndex: 'startTime',
     valueType: 'time',
     width: 160,
     align: 'center',
   },
   {
-    title: '结束时间',
+    title: i18next.t('endTime'),
     dataIndex: 'endTime',
     valueType: 'time',
     width: 160,
     align: 'center',
   },
   {
-    title: '操作',
+    title: i18next.t('operation'),
     valueType: 'option',
     width: 150,
     align: 'center',
@@ -73,17 +105,17 @@ export const getColumns = (onDeleteHandler: Function): ProColumns[] => [
             action?.startEditable(record.key || '');
           }}
         >
-          编辑
+          {i18next.t('edit')}
         </a>
         <Popconfirm
-          title="提醒"
-          description="确认要删除吗？"
+          title={i18next.t('prompt')}
+          description={i18next.t('sureDelete')}
           onConfirm={() => onDeleteHandler(record.key)}
         >
           <a
             key="delete"
           >
-            删除
+            {i18next.t('delete')}
           </a>
         </Popconfirm>
       </Space>

@@ -2,6 +2,7 @@ import { useSchedules } from '@/services/dashboard';
 import {
   Avatar, Descriptions, Result, Space, Spin, Steps, Tooltip,
 } from 'antd';
+import { useTranslation } from 'react-i18next';
 import { SCHEDULE_STATUS } from '@/utils/constants';
 import style from './index.module.less';
 
@@ -16,12 +17,12 @@ const Schedule = ({
   day,
 }: IProps) => {
   const { data, loading } = useSchedules(day);
-
+  const { t } = useTranslation();
   if (data?.length === 0) {
     return (
       <Result
         status="warning"
-        title="当前没有排课，快去排课吧"
+        title={t('noScheduleCourse')}
       />
     );
   }
@@ -37,7 +38,7 @@ const Schedule = ({
               <Descriptions bordered size="small">
                 <Descriptions.Item
                   span={3}
-                  label="讲师"
+                  label={t('lecturer')}
                 >
                   <Space>
                     {
@@ -56,12 +57,12 @@ const Schedule = ({
                 </Descriptions.Item>
                 <Descriptions.Item
                   span={3}
-                  label={`学员(${item.scheduleRecords.length})`}
+                  label={`${t('student')}(${item.scheduleRecords.length})`}
                   labelStyle={{
                     width: 80,
                   }}
                 >
-                  {item.scheduleRecords.length === 0 && '暂无学员预约'}
+                  {item.scheduleRecords.length === 0 && t('noReserve')}
                   <Avatar.Group
                     maxCount={10}
                     maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
@@ -70,7 +71,7 @@ const Schedule = ({
                     item.scheduleRecords.map((sr) => (
                       <Tooltip
                         key={sr.id}
-                        title={sr.student.name + (sr.status === SCHEDULE_STATUS.CANCEL ? '：已取消' : '')}
+                        title={sr.student.name + (sr.status === SCHEDULE_STATUS.CANCEL ? t('canceled') : '')}
                       >
                         <Avatar
                           key={sr.student.id}

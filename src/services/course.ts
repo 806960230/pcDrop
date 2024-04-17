@@ -1,6 +1,7 @@
 import { message } from 'antd';
 import { TBaseCourse, TCourseQuery, TCoursesQuery } from '@/utils/types';
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constants';
 import { COMMIT_COURSE, GET_COURSE, GET_COURSES } from '../graphql/course';
 
@@ -75,6 +76,7 @@ export const useCoursesForSample = () => {
 
 export const useEditCourseInfo = (): [handleEdit: Function, loading: boolean] => {
   const [edit, { loading }] = useMutation(COMMIT_COURSE);
+  const { t } = useTranslation();
 
   const handleEdit = async (
     id: number,
@@ -88,11 +90,12 @@ export const useEditCourseInfo = (): [handleEdit: Function, loading: boolean] =>
       },
     });
     if (res.data.commitCourseInfo.code === 200) {
-      message.success(res.data.commitCourseInfo.message);
+      // res.data.commitCourseInfo.message
+      message.success(t('commitCourseInfoOk'));
       callback(true);
       return;
     }
-    message.error(res.data.commitCourseInfo.message);
+    message.error(t('commitCourseInfoFail'));
   };
 
   return [handleEdit, loading];

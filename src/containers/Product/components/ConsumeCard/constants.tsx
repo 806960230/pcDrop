@@ -1,10 +1,11 @@
 import { CARD_TYPE } from '@/utils/constants';
 import { ProColumns } from '@ant-design/pro-components';
 import { Popconfirm, Space } from 'antd';
+import i18next from 'i18next';
 
 export const getColumns = (onDeleteHandler: Function): ProColumns[] => [
   {
-    title: '序号',
+    title: i18next.t('serial number'),
     dataIndex: 'key',
     width: 50,
     editable: false,
@@ -12,19 +13,19 @@ export const getColumns = (onDeleteHandler: Function): ProColumns[] => [
     render: (d, r, index) => index + 1,
   },
   {
-    title: '名称',
+    title: i18next.t('name'),
     dataIndex: 'name',
     align: 'center',
   },
   {
-    title: '有效期（天）',
+    title: i18next.t('validityDay'),
     dataIndex: 'validityDay',
     valueType: 'digit',
     width: 110,
     align: 'center',
   },
   {
-    title: '类型',
+    title: i18next.t('kind'),
     dataIndex: 'type',
     valueType: 'select',
     width: 120,
@@ -32,23 +33,23 @@ export const getColumns = (onDeleteHandler: Function): ProColumns[] => [
     request: async () => [
       {
         value: CARD_TYPE.TIME,
-        label: '次卡',
+        label: i18next.t('times card'),
       },
       {
         value: CARD_TYPE.DURATION,
-        label: '时长卡',
+        label: i18next.t('clock card'),
       },
     ],
   },
   {
-    title: '次数',
+    title: i18next.t('times'),
     dataIndex: 'time',
     valueType: 'digit',
     width: 100,
     align: 'center',
   },
   {
-    title: '操作',
+    title: i18next.t('operation'),
     valueType: 'option',
     width: 150,
     align: 'center',
@@ -60,17 +61,17 @@ export const getColumns = (onDeleteHandler: Function): ProColumns[] => [
             action?.startEditable(record.id || '');
           }}
         >
-          编辑
+          {i18next.t('edit')}
         </a>
         <Popconfirm
-          title="提醒"
-          description="确认要删除吗？"
+          title={i18next.t('prompt')}
+          description={i18next.t('sureDelete')}
           onConfirm={() => onDeleteHandler(record.id)}
         >
           <a
             key="delete"
           >
-            删除
+            {i18next.t('delete')}
           </a>
         </Popconfirm>
       </Space>

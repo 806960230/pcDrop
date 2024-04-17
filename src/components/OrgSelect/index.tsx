@@ -5,6 +5,7 @@ import { useOrganizations } from '@/services/org';
 import { currentOrg } from '@/utils';
 import { LOCAL_CURRENT_ORG } from '@/utils/constants';
 import { Select, Space } from 'antd';
+import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { useEffect } from 'react';
 
@@ -15,6 +16,7 @@ const OrgSelect = () => {
   const { data, refetch } = useOrganizations(1, 10, true);
   const { go } = useGoTo();
   const { setStore } = useUserContext();
+  const { t } = useTranslation();
   useEffect(() => {
     if (currentOrg()?.value) {
       setStore({
@@ -40,10 +42,11 @@ const OrgSelect = () => {
 
   return (
     <Space>
-      选择门店：
+      {t('choose store')}
+      :
       <Select
         style={{ width: 200 }}
-        placeholder="请选择门店"
+        placeholder={t('choose store')}
         showSearch
         onSearch={onSearchHandler}
         filterOption={false}

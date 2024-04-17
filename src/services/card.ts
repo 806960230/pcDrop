@@ -2,6 +2,7 @@ import { ICard } from '@/utils/types';
 import { COMMIT_CARD, DELETE_CARD, GET_CARDS } from '@/graphql/card';
 import { message } from 'antd';
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 
 export const useCards = (courseId: string) => {
   const { data, loading, refetch } = useQuery(GET_CARDS, {
@@ -19,7 +20,6 @@ export const useCards = (courseId: string) => {
 
 export const useLazyCards = () => {
   const [get, { data, loading }] = useLazyQuery(GET_CARDS);
-
   const getCards = (courseId: string) => {
     get({
       variables: {
@@ -37,6 +37,7 @@ export const useLazyCards = () => {
 
 export const useEditCardInfo = (): [handleEdit: Function, loading: boolean] => {
   const [edit, { loading }] = useMutation(COMMIT_CARD);
+  const { t } = useTranslation();
 
   const handleEdit = async (
     id: string,
@@ -52,11 +53,12 @@ export const useEditCardInfo = (): [handleEdit: Function, loading: boolean] => {
       },
     });
     if (res.data.commitCardInfo.code === 200) {
-      message.success(res.data.commitCardInfo.message);
+      // res.data.commitCardInfo.message
+      message.success(t('updateCardOk'));
       callback();
       return;
     }
-    message.error(res.data.commitCardInfo.message);
+    message.error(t('updateCardFail'));
   };
 
   return [handleEdit, loading];
@@ -64,7 +66,7 @@ export const useEditCardInfo = (): [handleEdit: Function, loading: boolean] => {
 
 export const useDeleteCard = (): [handleEdit: Function, loading: boolean] => {
   const [del, { loading }] = useMutation(DELETE_CARD);
-
+  const { t } = useTranslation();
   const delHandler = async (id: number, callback: () => void) => {
     const res = await del({
       variables: {
@@ -72,11 +74,12 @@ export const useDeleteCard = (): [handleEdit: Function, loading: boolean] => {
       },
     });
     if (res.data.deleteCard.code === 200) {
-      message.success(res.data.deleteCard.message);
+      // res.data.deleteCard.message
+      message.success(t('deleteCardOk'));
       callback();
       return;
     }
-    message.error(res.data.deleteCard.message);
+    message.error(t('deleteCardFail'));
   };
 
   return [delHandler, loading];

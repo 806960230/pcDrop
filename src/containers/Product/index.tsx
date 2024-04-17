@@ -1,6 +1,7 @@
 import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
 import { useDeleteProduct, useEditProductInfo, useProducts } from '@/services/product';
 import { IProduct } from '@/utils/types';
+import { useTranslation } from 'react-i18next';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constants';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -20,7 +21,7 @@ const Product = () => {
   const [edit, editLoading] = useEditProductInfo();
   const [showInfo, setShowInfo] = useState(false);
   const [showCard, setShowCard] = useState(false);
-
+  const { t } = useTranslation();
   const onClickAddHandler = (id?: string) => {
     if (id) {
       setCurId(id);
@@ -53,7 +54,7 @@ const Product = () => {
   };
 
   return (
-    <PageContainer header={{ title: '当前门店下的商品' }}>
+    <PageContainer header={{ title: t('storeProducts') }}>
       <ProTable<IProduct>
         rowKey="id"
         form={{
@@ -72,7 +73,7 @@ const Product = () => {
         }}
         toolBarRender={() => [
           <Button key="add" onClick={() => onClickAddHandler()} type="primary" icon={<PlusOutlined />}>
-            新建
+            {t('add')}
           </Button>,
         ]}
         request={refetch}

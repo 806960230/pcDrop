@@ -1,10 +1,11 @@
 import { ProCard, PageContainer } from '@ant-design/pro-components';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
-  Card, Tag, Button, Input, Pagination, Result, Popconfirm,
+  Card, Tag, Button, Input, Pagination, Result, Popconfirm, Image,
 } from 'antd';
 import { useState } from 'react';
 import { useDeleteTeacher, useTeachers } from '@/services/teacher';
+import { useTranslation } from 'react-i18next';
 import CreateTeacher from './components/CreateTeacher';
 import style from './index.module.less';
 
@@ -13,7 +14,7 @@ const Teacher = () => {
   const [delHandler, delLoading] = useDeleteTeacher();
   const [show, setShow] = useState(false);
   const [curId, setCurId] = useState<string>('');
-
+  const { t } = useTranslation();
   const editInfoHandler = (id?: string) => {
     if (id) {
       setCurId(id);
@@ -52,12 +53,12 @@ const Teacher = () => {
     <div className={style.container}>
       <PageContainer
         header={{
-          title: '教师管理',
+          title: t('teacherManagement'),
         }}
       >
         <Card>
           <Input.Search
-            placeholder="请输入教师名字进行搜索"
+            placeholder={t('searchTeacher')}
             className={style.teacherSearch}
             onSearch={onSearchHandler}
             enterButton
@@ -68,10 +69,10 @@ const Teacher = () => {
             type="primary"
             onClick={() => editInfoHandler()}
           >
-            新增
+            {t('add')}
           </Button>
         </Card>
-        {data?.length === 0 && <Result title="暂无教师数据" />}
+        {data?.length === 0 && <Result title={t('noTeachers')} icon={<Image src="https://water-drop-gan.oss-cn-hongkong.aliyuncs.com/images/cry2.png" preview={false} width={300} />} />}
         {data?.map((item) => (
           <ProCard
             key={item.id}
@@ -82,8 +83,8 @@ const Teacher = () => {
                 onClick={() => editInfoHandler(item.id)}
               />,
               <Popconfirm
-                title="提醒"
-                description="确认要删除吗？"
+                title={t('prompt')}
+                description={t('sureDelete')}
                 okButtonProps={{ loading: delLoading }}
                 onConfirm={() => onDeleteHandler(item.id)}
               >
@@ -121,10 +122,10 @@ const Teacher = () => {
           />
         </div>
         {show && (
-        <CreateTeacher
-          id={curId}
-          onClose={closeAndRefetchHandler}
-        />
+          <CreateTeacher
+            id={curId}
+            onClose={closeAndRefetchHandler}
+          />
         )}
       </PageContainer>
     </div>

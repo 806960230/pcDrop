@@ -1,7 +1,6 @@
 import { IPropChild } from '@/utils/types';
 import { connect, useGetUser } from '@/hooks/userHooks';
 import { Spin } from 'antd';
-
 /**
 * 获取用户信息组件
 */

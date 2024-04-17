@@ -3,6 +3,7 @@ import { ProColumns } from '@ant-design/pro-components';
 import {
   Image, Popconfirm, Space,
 } from 'antd';
+import i18next from 'i18next';
 
 interface IProps {
   onEditHandler: (id: string) => void;
@@ -10,7 +11,6 @@ interface IProps {
   onDeleteHandler: (id: string) => void;
   onStatusChangeHandler: (id: string, status: string) => void;
 }
-
 const PRODUCT_STATUS = {
   LIST: 'LIST',
   UN_LIST: 'UN_LIST',
@@ -31,7 +31,7 @@ export const getColumns: (props: IProps) => ProColumns<IProduct, 'text'>[] = ({
     width: 50,
   },
   {
-    title: '封面',
+    title: i18next.t('coverImage'),
     dataIndex: 'coverUrl',
     search: false,
     align: 'center',
@@ -39,7 +39,7 @@ export const getColumns: (props: IProps) => ProColumns<IProduct, 'text'>[] = ({
     render: (_, record: IProduct) => <Image src={record.coverUrl} />,
   },
   {
-    title: '商品名',
+    title: i18next.t('productName'),
     dataIndex: 'name',
     copyable: true,
     ellipsis: true,
@@ -47,53 +47,53 @@ export const getColumns: (props: IProps) => ProColumns<IProduct, 'text'>[] = ({
       rules: [
         {
           required: true,
-          message: '此项必填',
+          message: i18next.t('inputMust'),
         },
       ],
     },
   },
   {
-    title: '原价',
+    title: i18next.t('originalPrice'),
     search: false,
     dataIndex: 'originalPrice',
-    width: 50,
+    width: 100,
   },
   {
-    title: '优惠价',
+    title: i18next.t('discountPrice'),
     search: false,
     dataIndex: 'preferentialPrice',
-    width: 80,
+    width: 120,
   },
   {
-    title: '库存总额',
+    title: i18next.t('stock'),
     search: false,
     width: 80,
     align: 'center',
     dataIndex: 'stock',
   },
   {
-    title: '当前库存',
+    title: i18next.t('currentStock'),
     search: false,
-    width: 80,
+    width: 120,
     align: 'center',
     dataIndex: 'curStock',
   },
   {
-    title: '每人限购',
+    title: i18next.t('limitBuy'),
     search: false,
-    width: 80,
+    width: 180,
     align: 'center',
     dataIndex: 'limitBuyNumber',
   },
   {
-    title: '销量',
+    title: i18next.t('salesVolume'),
     search: false,
-    width: 50,
+    width: 120,
     align: 'center',
     dataIndex: 'buyNumber',
   },
   {
-    title: '操作',
+    title: i18next.t('operation'),
     valueType: 'option',
     dataIndex: 'id',
     align: 'center',
@@ -109,7 +109,7 @@ export const getColumns: (props: IProps) => ProColumns<IProduct, 'text'>[] = ({
               }}
               onClick={() => onStatusChangeHandler(entity.id, PRODUCT_STATUS.LIST)}
             >
-              上架
+              {i18next.t('list')}
             </a>
           )
           : (
@@ -120,24 +120,24 @@ export const getColumns: (props: IProps) => ProColumns<IProduct, 'text'>[] = ({
               }}
               onClick={() => onStatusChangeHandler(entity.id, PRODUCT_STATUS.UN_LIST)}
             >
-              下架
+              {i18next.t('unlist')}
             </a>
           )}
         <a
           key="edit"
           onClick={() => onEditHandler(entity.id)}
         >
-          编辑
+          {i18next.t('edit')}
         </a>
         <a
           key="card"
           onClick={() => onCardHandler(entity.id)}
         >
-          绑定消费卡
+          {i18next.t('linkCard')}
         </a>
         <Popconfirm
-          title="提醒"
-          description="确认要删除吗？"
+          title={i18next.t('prompt')}
+          description={i18next.t('sureDelete')}
           onConfirm={() => onDeleteHandler(entity.id)}
         >
           <a
@@ -147,7 +147,7 @@ export const getColumns: (props: IProps) => ProColumns<IProduct, 'text'>[] = ({
               color: 'red',
             }}
           >
-            删除
+            {i18next.t('delete')}
           </a>
         </Popconfirm>
       </Space>

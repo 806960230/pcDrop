@@ -8,6 +8,7 @@ import UploadImage from '@/components/OSSImageUpload';
 import { useEditProductInfo, useProductInfo } from '@/services/product';
 import { useState } from 'react';
 import TypeSelect from '@/components/TypeSelect';
+import { useTranslation } from 'react-i18next';
 
 const { TextArea } = Input;
 
@@ -27,7 +28,7 @@ const EditCourse = ({
   const [edit, editLoading] = useEditProductInfo();
   const { data, loading } = useProductInfo(id);
   const [open, setOpen] = useState(true);
-
+  const { t } = useTranslation();
   const onSubmitHandler = async () => {
     const values = await form.validateFields();
     if (values) {
@@ -42,16 +43,16 @@ const EditCourse = ({
 
   return (
     <Drawer
-      title={id ? '编辑商品' : '新建商品'}
+      title={id ? t('editProduct') : t('createProduct')}
       width={900}
       open={open}
       onClose={() => setOpen(false)}
       afterOpenChange={(o) => !o && onClose()}
       extra={(
         <Space>
-          <Button onClick={() => onClose()}>取消</Button>
+          <Button onClick={() => onClose()}>{t('cancel')}</Button>
           <Button loading={editLoading} onClick={onSubmitHandler} type="primary">
-            提交
+            {t('submit')}
           </Button>
         </Space>
       )}
@@ -66,7 +67,7 @@ const EditCourse = ({
             <Col span={18}>
               <Form.Item
                 style={{ width: '100%' }}
-                label="名称"
+                label={t('name')}
                 name="name"
                 rules={[{ required: true }]}
               >
@@ -75,7 +76,7 @@ const EditCourse = ({
             </Col>
             <Col span={6}>
               <Form.Item
-                label="商品分类"
+                label={t('product classification')}
                 name="type"
                 rules={[{ required: true }]}
               >
@@ -86,7 +87,7 @@ const EditCourse = ({
           <Row gutter={20}>
             <Col span={6}>
               <Form.Item
-                label="库存总额"
+                label={t('stock')}
                 name="stock"
                 rules={[{ required: true }]}
               >
@@ -95,7 +96,7 @@ const EditCourse = ({
             </Col>
             <Col span={6}>
               <Form.Item
-                label="原价"
+                label={t('originalPrice')}
                 name="originalPrice"
                 rules={[{ required: true }]}
               >
@@ -104,7 +105,7 @@ const EditCourse = ({
             </Col>
             <Col span={6}>
               <Form.Item
-                label="优惠价"
+                label={t('discountPrice')}
                 name="preferentialPrice"
                 rules={[{ required: true }]}
               >
@@ -113,7 +114,7 @@ const EditCourse = ({
             </Col>
             <Col span={6}>
               <Form.Item
-                label="每人限购数量"
+                label={t('limitBuy')}
                 name="limitBuyNumber"
                 rules={[{ required: true }]}
               >
@@ -122,7 +123,7 @@ const EditCourse = ({
             </Col>
           </Row>
           <Form.Item
-            label="商品简介"
+            label={t('productDescription')}
             name="desc"
             rules={[{ required: true }]}
           >
@@ -133,18 +134,19 @@ const EditCourse = ({
               showCount
             />
           </Form.Item>
-          <Divider>图片设置</Divider>
+          <Divider>{t('imageSet')}</Divider>
           <Row gutter={20}>
             <Col span={12}>
               <Form.Item
                 name="coverUrl"
-                label="商品封面图：图片长宽要求比例为 16:9 "
+                label={t('productCover')}
                 rules={[{ required: true }]}
                 labelCol={{
                   span: 24,
                 }}
               >
                 <UploadImage
+                  label={t('upload images')}
                   maxCount={1}
                   imgCropAspect={16 / 9}
                 />
@@ -153,13 +155,14 @@ const EditCourse = ({
             <Col span={12}>
               <Form.Item
                 name="bannerUrl"
-                label="商品 Banner 横图：图片长宽要求比例为 16:9 "
+                label={t('bannerCover')}
                 rules={[{ required: true }]}
                 labelCol={{
                   span: 24,
                 }}
               >
                 <UploadImage
+                  label={t('upload images')}
                   maxCount={1}
                   imgCropAspect={16 / 9}
                 />

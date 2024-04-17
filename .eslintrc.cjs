@@ -13,7 +13,10 @@ module.exports = {
     'jsx-a11y/anchor-is-valid': 0,
     'jsx-a11y/click-events-have-key-events': 0,
     'jsx-a11y/no-static-element-interactions': 0,
-    'linebreak-style': ["off", "windows"]
+    'linebreak-style': ["off", "windows"],
+    'react/jsx-one-expression-per-line': 0,
+    'import/no-cycle': 0,
+    'react/jsx-no-constructed-context-values': 0
   },
   parser: require.resolve('@typescript-eslint/parser'),
   parserOptions: {

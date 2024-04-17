@@ -1,6 +1,7 @@
 import { ICourse } from '@/utils/types';
 import { ProColumns } from '@ant-design/pro-components';
 import { Button, Space } from 'antd';
+import i18next from 'i18next';
 
 interface IProps {
   onEditHandler: (id: string) => void
@@ -18,28 +19,28 @@ export const getColumns: ({
   onCardHandler,
 }) => [
   {
-    title: '课程标题',
+    title: i18next.t('courseTitle'),
     dataIndex: 'name',
     ellipsis: true,
   },
   {
-    title: '限制人数',
+    title: i18next.t('limitNumber'),
     dataIndex: 'limitNumber',
-    width: 75,
+    width: 180,
     search: false,
   },
   {
-    title: '持续时长',
+    title: i18next.t('duration'),
     dataIndex: 'duration',
     width: 75,
     search: false,
   },
   {
-    title: '操作',
+    title: i18next.t('operation'),
     valueType: 'option',
     dataIndex: 'id',
     align: 'center',
-    width: 300,
+    width: 500,
     render: (text, entity) => (
       <Space>
         <Button
@@ -47,21 +48,21 @@ export const getColumns: ({
           type="link"
           onClick={() => onEditHandler(entity.id)}
         >
-          编辑
+          {i18next.t('edit')}
         </Button>
         <Button
           key="orderTime"
           type="link"
           onClick={() => onOrderTimeHandler(entity.id)}
         >
-          可约时间
+          {i18next.t('availableTime')}
         </Button>
         <Button
           key="card"
           type="link"
           onClick={() => onCardHandler(entity.id)}
         >
-          关联消费卡
+          {i18next.t('connectedWithCard')}
         </Button>
       </Space>
     ),

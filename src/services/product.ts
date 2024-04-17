@@ -4,6 +4,7 @@ import {
   TBaseProduct, TProductQuery, TProductsQuery, TProductTypeQuery,
 } from '@/utils/types';
 import { useQuery, useMutation } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constants';
 import {
   GET_PRODUCTS, GET_PRODUCT, COMMIT_PRODUCT, DELETE_PRODUCT, GET_PRODUCT_TYPES,
@@ -58,6 +59,7 @@ export const useProducts = (
 
 export const useEditProductInfo = (): [handleEdit: Function, loading: boolean] => {
   const [edit, { loading }] = useMutation(COMMIT_PRODUCT);
+  const { t } = useTranslation();
 
   const handleEdit = async (
     id: number,
@@ -71,11 +73,12 @@ export const useEditProductInfo = (): [handleEdit: Function, loading: boolean] =
       },
     });
     if (res.data.commitProductInfo.code === 200) {
-      message.success(res.data.commitProductInfo.message);
+      // res.data.commitProductInfo.message
+      message.success(t('updateProductOk'));
       callback(true);
       return;
     }
-    message.error(res.data.commitProductInfo.message);
+    message.error(t('updateProductFail'));
   };
 
   return [handleEdit, loading];
@@ -100,6 +103,7 @@ export const useProductInfo = (id?: string) => {
 
 export const useDeleteProduct = (): [handleEdit: Function, loading: boolean] => {
   const [del, { loading }] = useMutation(DELETE_PRODUCT);
+  const { t } = useTranslation();
 
   const delHandler = async (id: string, callback: () => void) => {
     const res = await del({
@@ -108,11 +112,12 @@ export const useDeleteProduct = (): [handleEdit: Function, loading: boolean] => 
       },
     });
     if (res.data.deleteProduct.code === 200) {
-      message.success(res.data.deleteProduct.message);
+      // res.data.deleteProduct.message
+      message.success(t('deleteProductOk'));
       callback();
       return;
     }
-    message.error(res.data.deleteProduct.message);
+    message.error(t('deleteProductFail'));
   };
 
   return [delHandler, loading];

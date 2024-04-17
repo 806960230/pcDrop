@@ -1,4 +1,5 @@
 import {
+  GlobalOutlined,
   LockOutlined,
   MobileOutlined,
 } from '@ant-design/icons';
@@ -9,15 +10,20 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import {
+  Button,
+  Image,
   message, Tabs,
 } from 'antd';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
+import { useContext } from 'react';
+import { DataContext } from '@/routes';
+import { debounce } from 'lodash';
 import { AUTH_TOKEN } from '@/utils/constants';
 import { LOGIN, SEND_CODE_MSG } from '@/graphql/auth';
-
 import { useTitle } from '@/hooks';
 import { useUserContext } from '@/hooks/userHooks';
+import { useTranslation } from 'react-i18next';
 import styles from './index.module.less';
 
 interface IValue {
@@ -31,8 +37,25 @@ export default () => {
   const [login] = useMutation(LOGIN);
   const [params] = useSearchParams();
   const { store } = useUserContext();
+  const { setLocale } = useContext(DataContext);
+  const { t, i18n } = useTranslation();
   const nav = useNavigate();
-  useTitle('登录');
+  useTitle(t('login'));
+
+  const changeLan = () => {
+    let language;
+    if (!localStorage.getItem('i18nextLng') || localStorage.getItem('i18nextLng') === 'en') {
+      localStorage.setItem('i18nextLng', 'ch');
+      language = 'ch';
+    } else {
+      localStorage.setItem('i18nextLng', 'en');
+      language = 'en';
+      setLocale(language);
+    }
+    i18n.changeLanguage(language);
+    setLocale(language);
+  };
+  const debouncedAction = debounce(changeLan, 250);
 
   const loginHandler = async (values: IValue) => {
     const res = await login({
@@ -47,7 +70,7 @@ export default () => {
         localStorage.setItem(AUTH_TOKEN, '');
         sessionStorage.setItem(AUTH_TOKEN, res.data.login.data);
       }
-      message.success(res.data.login.message);
+      message.success(t('login_success'));
       nav(params.get('orgUrl') || '/');
       return;
     }
@@ -57,16 +80,18 @@ export default () => {
   return (
     <div className={styles.container}>
       <LoginFormPage
+        backgroundImageUrl="https://water-drop-gan.oss-cn-hongkong.aliyuncs.com/images/3.png"
         initialValues={{ tel: '19357227510' }}
+        submitter={{ searchConfig: { submitText: t('login') } }}
         onFinish={loginHandler}
-        backgroundImageUrl="https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png"
-        logo="http://water-drop-assets.oss-cn-hangzhou.aliyuncs.com/images/henglogo.png"
       >
+        <Image src="https://water-drop-gan.oss-cn-hongkong.aliyuncs.com/images/newfont.png" className={styles.font} preview={false} />
+        <Image src="https://water-drop-gan.oss-cn-hongkong.aliyuncs.com/images/read.jpg" className={styles.logo} preview={false} />
         <Tabs
           centered
           items={[{
             key: 'phone',
-            label: '手机号登录',
+            label: t('Phone_number_login'),
           }]}
         />
         <>
@@ -76,15 +101,15 @@ export default () => {
               prefix: <MobileOutlined className="prefixIcon" />,
             }}
             name="tel"
-            placeholder="手机号"
+            placeholder={t('Phone_number_login')}
             rules={[
               {
                 required: true,
-                message: '请输入手机号！',
+                message: t('InputPhoneNumber'),
               },
               {
                 pattern: /^1\d{10}$/,
-                message: '手机号格式错误！',
+                message: t('PhoneNumberFormatError'),
               },
             ]}
           />
@@ -96,19 +121,19 @@ export default () => {
             captchaProps={{
               size: 'large',
             }}
-            placeholder="请输入验证码"
+            placeholder={t('InputVerificationCode')}
             captchaTextRender={(timing, count) => {
               if (timing) {
-                return `${count} ${'获取验证码'}`;
+                return `${count} ${t('Get_verification_code')}`;
               }
-              return '获取验证码';
+              return t('Get_verification_code');
             }}
             phoneName="tel"
             name="code"
             rules={[
               {
                 required: true,
-                message: '请输入验证码！',
+                message: t('InputVerificationCode'),
               },
             ]}
             onGetCaptcha={async (tel: string) => {
@@ -118,9 +143,11 @@ export default () => {
                 },
               });
               if (res.data.sendCodeMsg.code === 200) {
-                message.success(res.data.sendCodeMsg.message);
+                // res.data.sendCodeMsg.message
+                message.success(t('sendCodeOk'));
               } else {
-                message.error(res.data.sendCodeMsg.message);
+                // res.data.sendCodeMsg.message
+                message.error(t('sendCodeFail'));
               }
             }}
           />
@@ -128,11 +155,20 @@ export default () => {
         <div
           style={{
             marginBlockEnd: 24,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
           <ProFormCheckbox noStyle name="autoLogin">
-            自动登录（万能验证码 1024）
+            {t('auto_login')}
+            (
+            {t('Universal verification code')}
+            )
+            1024
           </ProFormCheckbox>
+          <Button onClick={debouncedAction} style={{ margin: '0 auto', backgroundColor: '#ff8000', color: 'white' }}><GlobalOutlined /></Button>
         </div>
       </LoginFormPage>
     </div>

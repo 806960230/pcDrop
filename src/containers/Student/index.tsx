@@ -4,13 +4,14 @@ import {
   Card, Pagination, Space,
 } from 'antd';
 import { IStudent } from '@/utils/types';
+import { useTranslation } from 'react-i18next';
 import style from './index.module.less';
 
 const Student = () => {
   const {
     loading, data, page, refetch,
   } = useStudents();
-
+  const { t } = useTranslation();
   const onPageChangeHandler = (pageNum: number, pageSize: number) => {
     refetch({
       page: {
@@ -25,7 +26,7 @@ const Student = () => {
       <PageContainer
         loading={loading}
         header={{
-          title: '学员管理',
+          title: t('studentManagement'),
         }}
       >
         <Card>
@@ -43,8 +44,8 @@ const Student = () => {
               )}
             >
               <Card.Meta
-                title={item.name || '无名氏'}
-                description={<Space>{[item.account || '无账号', item.tel || '无手机号']}</Space>}
+                title={item.name || t('Anonymous')}
+                description={<Space>{[item.account || t('no account'), item.tel || t('no phone number')]}</Space>}
               />
             </Card>
           ))

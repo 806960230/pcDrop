@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Button, Col, Drawer, Row, Space, Tabs,
 } from 'antd';
@@ -6,11 +6,12 @@ import { EditableProTable } from '@ant-design/pro-components';
 import { ChromeOutlined, RedoOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import { IOrderTime } from '@/utils/types';
+import { useTranslation } from 'react-i18next';
+import { DataContext } from '@/routes';
 import {
-  DAYS, IDay, getColumns, getMaxKey, isWorkDay,
+  DAYS, DAYSEN, IDay, getColumns, getMaxKey, isWorkDay,
 } from './constants';
 import { useOrderTime } from './hooks';
-
 import style from './index.module.less';
 
 interface IProps {
@@ -24,12 +25,18 @@ const OrderTime = ({
   onClose,
   id,
 }: IProps) => {
-  const [currentDay, setCurrentDay] = useState<IDay>(DAYS[0]);
+  const { t } = useTranslation();
+  const { locale } = useContext(DataContext);
+  const [currentDay, setCurrentDay] = useState<IDay>(locale === 'en' ? DAYSEN[0] : DAYS[0]);
   const onTabChangeHandler = (key: string) => {
-    const current = DAYS.find((item) => item.key === key) as IDay;
+    let current;
+    if (locale === 'en') {
+      current = DAYSEN.find((item) => item.key === key) as IDay;
+    } else {
+      current = DAYS.find((item) => item.key === key) as IDay;
+    }
     setCurrentDay(current);
   };
-
   const {
     orderTime,
     loading,
@@ -39,26 +46,29 @@ const OrderTime = ({
     allWorkDaySyncHandler,
   } = useOrderTime(id, currentDay.key);
 
+  // useEffect(() => {
+  // }, [locale])
+
   return (
     <Drawer
-      title="编辑预约时间"
+      title={t('editReserveTime')}
       width={720}
       open
       onClose={() => onClose()}
     >
       <Tabs
         type="card"
-        items={DAYS}
+        items={locale === 'en' ? DAYSEN : DAYS}
         onChange={onTabChangeHandler}
       />
       <EditableProTable<IOrderTime>
         headerTitle={(
           <Space>
-            选择
+            {t('choose')}
             <span className={style.name}>
               {currentDay.label}
             </span>
-            的课开放预约的时间
+            {t('reserveTime')}
           </Space>
         )}
         loading={loading}
@@ -95,7 +105,7 @@ const OrderTime = ({
             disabled={!isWorkDay(currentDay.key)}
             onClick={allWorkDaySyncHandler}
           >
-            全工作日同步
+            {t('Synchronize weekdays')}
           </Button>
         </Col>
         <Col span={12}>
@@ -106,7 +116,7 @@ const OrderTime = ({
             danger
             onClick={allWeekSyncHandler}
           >
-            全周同步
+            {t('Synchronize week')}
           </Button>
         </Col>
       </Row>

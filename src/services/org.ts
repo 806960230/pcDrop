@@ -4,6 +4,7 @@ import {
   GET_ORGS, GET_ORG, COMMIT_ORG, DEL_ORG,
   GET_SAMPLE_ORGS,
 } from '@/graphql/org';
+import { useTranslation } from 'react-i18next';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constants';
 import { TOrgsQuery, TOrgQuery, TBaseOrganization } from '@/utils/types';
 
@@ -60,6 +61,7 @@ export const useEditInfo = (): [handleEdit: Function, loading: boolean] => {
 
 export const useDeleteOrg = (): [handleEdit: Function, loading: boolean] => {
   const [del, { loading }] = useMutation(DEL_ORG);
+  const { t } = useTranslation();
 
   const delHandler = async (id: number, callback: () => void) => {
     const res = await del({
@@ -68,11 +70,12 @@ export const useDeleteOrg = (): [handleEdit: Function, loading: boolean] => {
       },
     });
     if (res.data.deleteOrganization.code === 200) {
-      message.success(res.data.deleteOrganization.message);
+      // res.data.deleteOrganization.message
+      message.success(t('deleteOrgOk'));
       callback();
       return;
     }
-    message.error(res.data.deleteOrganization.message);
+    message.error(t('deleteOrgFail'));
   };
 
   return [delHandler, loading];
